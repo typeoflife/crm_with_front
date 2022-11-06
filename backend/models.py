@@ -17,7 +17,7 @@ class Order(models.Model):
     status = models.CharField(verbose_name='Статус заказа', choices=STATUS, max_length=5, default='open')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
     order_number = models.PositiveIntegerField()
-    summ = models.PositiveIntegerField(default=0)
+    summ = models.PositiveIntegerField(verbose_name='Сумма', default=0)
     text = models.TextField(verbose_name='Выполненная работа', null=True, blank=True)
 
     class Meta:

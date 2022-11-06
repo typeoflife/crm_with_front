@@ -1,0 +1,25 @@
+{% extends "backend/base.html" %}
+{% block content %}
+<button type="submit" class="btn btn-primary btn-sm active" style="margin-top: 10px; margin-left: 15px;"
+        role="button" aria-pressed="true">Напечатать</button>
+<div>
+    <a href="{% url 'edit_order' order.id %}" class="btn btn-primary btn-sm active" style="margin-top: 10px; margin-left: 15px;">Изменить заказ</a>
+</div>
+<p>Заказ №{{order.order_number}} {{order.device}} {{order.model}} Сумма:  {{order.summ}} р.</p>
+
+  <p>Заметки:</p>
+  <ul>
+      {% for entry in entries %}
+        <li>
+            <p>{{ entry.date_added|date:'M d, Y H:i'}}</p>
+            <p>{{ entry.text|linebreaks }}</p>
+            <p>
+                <a href="{% url 'backend:edit_entry' entry.id %}">Изменить комментарий</a>
+            </p>
+        </li>
+      {% empty %}
+        <li>Нет комментариев для данного заказа</li>
+      {% endfor %}
+  </ul>
+
+{% endblock content %}

@@ -1,0 +1,12 @@
+{% extends "backend/base.html" %}
+{% block content %}
+
+  <p>Заказ №{{order.order_number}} {{order.device}} {{order.model}} Сумма: {{order.summ}} </p>
+
+  <form action="{% url 'edit_order' order.id %}" method='post'>
+      {% csrf_token %}
+      {{ form.as_p}}
+      <button type="submit" class="btn btn-primary btn-sm active" style="margin-top: 10px; margin-left: 15px;">Добавить</button>
+  </form>
+
+{% endblock content %}

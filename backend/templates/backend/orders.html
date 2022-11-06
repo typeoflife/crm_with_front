@@ -1,0 +1,24 @@
+{% extends "backend/base.html" %}
+{% block content %}
+
+<div>
+    <a href="{% url 'new_order' %}" class="btn btn-primary btn-sm active" style="margin-top: 10px; margin-left: 15px;">
+        Добавить заказ</a>
+</div>
+
+
+<p>Заказы:</p>
+
+<ul>
+    {% for order in orders %}
+    <li>
+        <a href="{% url 'order' order.id %}">Заказ №{{order.order_number}}</a>
+        {{order.device}} {{order.model}} Сумма: {{order.summ}}
+
+    </li>
+    {% empty %}
+    <li>На данный момет заказов нет</li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}
