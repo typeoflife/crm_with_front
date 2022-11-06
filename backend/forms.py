@@ -15,17 +15,6 @@ class OrderForm(ModelForm):
         }
 
 
-# class EditOrderForm(forms.ModelForm):
-#     class Meta:
-#         model = Order
-#         fields = ('summ', 'status', 'text',)
-#         # widgets = {'summ': forms.TextInput(attrs={'type':'range','class':'form-range'})
-#         #  ,'status': forms.TextInput(attrs={'class':'form-control form-control-lg  select'})}
-#         status = forms.ModelChoiceField(
-#             queryset=Order.objects.values_list("status", flat=True).distinct(),
-#             empty_label=None
-#         )
-
 class EditOrderForm(ModelForm):
     class Meta:
         model = Order
@@ -42,11 +31,3 @@ class EditOrderForm(ModelForm):
             'summ': forms.TextInput(attrs={'class': 'form-control', 'style': 'width:auto'}),
             'text': forms.TextInput(attrs={'class': 'form-control', 'style': 'width:65%'}),
         }
-
-# class EditOrderForm(forms.Form):
-#     birth_year = forms.DateField(widget=forms.SelectDateWidget(years=BIRTH_YEAR_CHOICES))
-#     favorite_colors = forms.MultipleChoiceField(
-#         required=False,
-#         widget=forms.CheckboxSelectMultiple,
-#         choices=FAVORITE_COLORS_CHOICES,
-#     )
