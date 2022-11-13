@@ -1,5 +1,6 @@
 import datetime
 
+from django.core.paginator import Paginator
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_GET
@@ -7,9 +8,11 @@ from django.views.decorators.http import require_GET
 from backend.forms import OrderForm, EditOrderForm
 from backend.models import Order
 
+
 def check_order_owner(owner, request):
     if owner != request.user:
         raise Http404
+
 
 def index(request):
     if request.user.is_authenticated:
@@ -19,6 +22,7 @@ def index(request):
 
 def home(request):
     return render(request, 'backend/base.html')
+
 
 @require_GET
 def robots_txt(request):
@@ -31,7 +35,10 @@ def robots_txt(request):
 
 def orders(request):
     orders = Order.objects.filter(user_id=request.user.id).order_by('-order_number')
-    context = {'orders': orders}
+    paginator = Paginator(orders, 30)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context = {'page_obj': page_obj}
     return render(request, 'backend/orders.html', context)
 
 
@@ -48,8 +55,6 @@ def new_order(request):
         if form.is_valid():
             order = form.save(commit=False)
             order.user = request.user
-            order.date_added = datetime.datetime.now()
-            print(order.date_added)
             counter = Order.objects.filter(user_id=request.user.id).count() + 1
             order.order_number = counter
             order.save()

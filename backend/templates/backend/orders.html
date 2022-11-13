@@ -6,19 +6,33 @@
         Добавить заказ</a>
 </div>
 
-
 <p>Заказы:</p>
 
-<ul>
-    {% for order in orders %}
-    <li>
-        <a href="{% url 'order' order.id %}">Заказ №{{order.order_number}}</a>
-        {{order.device}} {{order.model}} Сумма: {{order.summ}}
+{% for order in page_obj %}
+<a href="{% url 'order' order.id %}">Заказ №{{order.order_number}}</a>
+[{{order.date_added|date:'d-M-Y H:i'}}] {{order}}<br>
+{% empty %}
+На данный момет заказов нет
+{% endfor %}
 
-    </li>
-    {% empty %}
-    <li>На данный момет заказов нет</li>
-    {% endfor %}
-</ul>
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}"
+               class="btn btn-primary btn-sm active" style="margin-top: 10px; margin-left: 15px;">Предыдущая</a>
+        {% endif %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}"
+               class="btn btn-primary btn-sm active" style="margin-top: 10px; margin-left: 15px;">Следующая</a>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+        </span>
+
+    </span>
+</div>
+
 
 {% endblock content %}

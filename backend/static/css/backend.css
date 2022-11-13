@@ -3,10 +3,17 @@
   margin-left: 15px;
 }
 
-textarea
+.textarea
 {
   border:1px solid #999999;
   width:50%;
   margin:5px 0;
   padding:3px;
+}
+
+.container {
+  width: 200px;
+  height: 200px;
+  background-color: blue;
+  margin-bottom: 10px;
 }

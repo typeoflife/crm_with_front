@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -24,7 +26,7 @@ class Order(models.Model):
         verbose_name_plural = 'order'
 
     def __str__(self):
-        return f'Заказ №{self.order_number}, ({self.device}), принят {self.date_added}'
+        return f'[{self.device}] [{self.model}] Сумма: {self.summ}'
 
 
 class Client(models.Model):
