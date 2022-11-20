@@ -5,7 +5,7 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_GET
 
-from backend.forms import OrderForm, EditOrderForm
+from backend.forms import EditOrderForm, CustomerForm, DeviceForm
 from backend.models import Order
 
 
@@ -34,7 +34,7 @@ def robots_txt(request):
 
 
 def orders(request):
-    orders = Order.objects.filter(user_id=request.user.id).order_by('-order_number')
+    orders = Order.objects.select_related('device').filter(user_id=request.user.id).order_by('-order_number')
     paginator = Paginator(orders, 30)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -43,7 +43,7 @@ def orders(request):
 
 
 def retrieve_order(request, order_id):
-    order = Order.objects.get(id=order_id)
+    order = Order.objects.select_related('device').get(id=order_id)
     check_order_owner(order.user, request)
     context = {'order': order}
     return render(request, 'backend/order.html', context)
@@ -51,22 +51,35 @@ def retrieve_order(request, order_id):
 
 def new_order(request):
     if request.method == "POST":
-        form = OrderForm(request.POST)
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.user = request.user
-            counter = Order.objects.filter(user_id=request.user.id).count() + 1
-            order.order_number = counter
-            order.save()
-            return redirect('order', order_id=order.pk)
+        deviceform = DeviceForm(request.POST)
+        customerform = CustomerForm(request.POST)
+        if deviceform.is_valid() and customerform.is_valid():
+            device = deviceform.save(commit=False)
+            customer = customerform.save(commit=False)
+            device.save()
+            order = Order.objects.create(user=request.user, date_added=datetime.datetime.now(),
+                                         order_number=Order.objects.filter(user_id=request.user.id).count() + 1,
+                                         device_id=device.id)
+            customer.user_id = request.user.id
+            customer.order_id = order.id
+            customer.save()
+            return redirect('order', order_id=order.id)
+        else:
+            context = {
+                'deviceform': deviceform,
+                'customerform': customerform,
+            }
     else:
-        form = OrderForm()
-    return render(request, 'backend/new_order.html', {'form': form})
+        context = {
+            'deviceform': DeviceForm(),
+            'customerform': CustomerForm(),
+        }
+    return render(request, 'backend/new_order.html', context)
 
 
 def edit_order(request, order_id):
     """"Редактирует запись конкретного заказа"""
-    order = Order.objects.get(id=order_id)
+    order = Order.objects.select_related('device').get(id=order_id)
     # Проверка того, что тема принадлежит текущему пользователю
     check_order_owner(order.user, request)
     if request.method != 'POST':

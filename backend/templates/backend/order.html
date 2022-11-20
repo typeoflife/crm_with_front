@@ -5,7 +5,7 @@
 <div>
     <a href="{% url 'edit_order' order.id %}" class="btn btn-primary btn-sm active" style="margin-top: 10px; margin-left: 15px;">Изменить заказ</a>
 </div>
-<p>Заказ №{{order.order_number}} {{order.device}} {{order.model}} Сумма:  {{order.summ}} р.</p>
+<p>Заказ №{{order.order_number}} {{order.device.name}} {{order.device.model}} Сумма:  {{order.summ}} р.</p>
 
   <p>Заметки:</p>
   <ul>

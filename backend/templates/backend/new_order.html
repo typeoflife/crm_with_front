@@ -4,7 +4,8 @@
 
   <form action="{% url 'new_order' %}" method='post'>
       {% csrf_token %}
-      {{ form.as_p}}
+      {{ deviceform.as_p}}
+      {{ customerform.as_p}}
       <button type="submit" class="btn btn-primary btn-sm active" style="margin-top: 10px; margin-left: 15px;">Добавить</button>
   </form>
 

@@ -1,7 +1,7 @@
 {% extends "backend/base.html" %}
 {% block content %}
 
-  <p>Заказ №{{order.order_number}} {{order.device}} {{order.model}} Сумма: {{order.summ}} </p>
+  <p>Заказ №{{order.order_number}} {{order.device.name}} {{order.device.model}} Сумма: {{order.summ}} </p>
 
   <form action="{% url 'edit_order' order.id %}" method='post'>
       {% csrf_token %}

@@ -9,10 +9,10 @@
 <p>Заказы:</p>
 
 {% for order in page_obj %}
-<a href="{% url 'order' order.id %}">Заказ №{{order.order_number}}</a>
-[{{order.date_added|date:'d-M-Y H:i'}}] {{order}}<br>
-{% empty %}
-На данный момет заказов нет
+    <a href="{% url 'order' order.id %}">Заказ №{{order.order_number}}</a>
+    {{order.device.name}} {{order.device.model}} Сумма: {{order.summ}}<br>
+    {% empty %}
+    На данный момет заказов нет
 {% endfor %}
 
 <div class="pagination">
