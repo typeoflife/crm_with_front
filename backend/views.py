@@ -34,7 +34,8 @@ def robots_txt(request):
 
 
 def orders(request):
-    orders = Order.objects.select_related('device').filter(user_id=request.user.id).order_by('-order_number')
+    orders = Order.objects.select_related('device').select_related('customer').filter(
+        user_id=request.user.id).order_by('-order_number')
     paginator = Paginator(orders, 30)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -57,12 +58,11 @@ def new_order(request):
             device = deviceform.save(commit=False)
             customer = customerform.save(commit=False)
             device.save()
+            customer.user_id = request.user.id
+            customer.save()
             order = Order.objects.create(user=request.user, date_added=datetime.datetime.now(),
                                          order_number=Order.objects.filter(user_id=request.user.id).count() + 1,
-                                         device_id=device.id)
-            customer.user_id = request.user.id
-            customer.order_id = order.id
-            customer.save()
+                                         device_id=device.id, customer_id=customer.id)
             return redirect('order', order_id=order.id)
         else:
             context = {

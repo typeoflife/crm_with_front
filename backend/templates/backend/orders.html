@@ -8,12 +8,38 @@
 
 <p>Заказы:</p>
 
-{% for order in page_obj %}
-    <a href="{% url 'order' order.id %}">Заказ №{{order.order_number}}</a>
-    {{order.device.name}} {{order.device.model}} Сумма: {{order.summ}}<br>
-    {% empty %}
-    На данный момет заказов нет
-{% endfor %}
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Заказ №</th>
+        <th>Статус</th>
+        <th>Сумма</th>
+        <th>Устройство</th>
+        <th>Модель</th>
+        <th>ФИО</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for order in page_obj %}
+    <tr>
+        <td><a href="{% url 'order' order.id %}">Заказ №{{order.order_number}}</a></td>
+        <td>{{order.status}}</td>
+        <td>{{order.summ}}</td>
+        <td>{{order.device.name}}</td>
+        <td>{{order.device.model}}</td>
+        <td>{{order.customer.fio}}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<!--{% for order in page_obj %}-->
+<!--    <a href="{% url 'order' order.id %}">Заказ №{{order.order_number}}</a>-->
+<!--    {{order.device.name}} {{order.device.model}} {{order.customer.fio}} Сумма: {{order.summ}}<br>-->
+<!--    {% empty %}-->
+<!--    На данный момет заказов нет-->
+<!--{% endfor %}-->
 
 <div class="pagination">
     <span class="step-links">

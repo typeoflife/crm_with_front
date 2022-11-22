@@ -1,7 +1,18 @@
-from datetime import datetime
-
 from django.contrib.auth.models import User
 from django.db import models
+
+
+class Customer(models.Model):
+    fio = models.CharField(verbose_name='ФИО клиента', max_length=50)
+    telephone = models.CharField(verbose_name='Контакный телефон', max_length=12)
+    address = models.CharField(verbose_name='Адрес клиента', max_length=80, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='customers')
+
+    class Meta:
+        verbose_name_plural = 'customers'
+
+    def __str__(self):
+        return f'Клиент: {self.fio}, телефон: {self.telephone}'
 
 
 class Device(models.Model):
@@ -24,27 +35,14 @@ class Order(models.Model):
     order_number = models.PositiveIntegerField()
     summ = models.PositiveIntegerField(verbose_name='Сумма', default=0)
     text = models.TextField(verbose_name='Выполненная работа', null=True, blank=True)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name_plural = 'order'
+        verbose_name_plural = 'orders'
 
     def __str__(self):
         return f'Заказ №{self.order_number}, принят {self.date_added}'
-
-
-class Customer(models.Model):
-    fio = models.CharField(verbose_name='ФИО клиента', max_length=50)
-    telephone = models.CharField(verbose_name='Контакный телефон', max_length=12)
-    address = models.CharField(verbose_name='Адрес клиента', max_length=80, null=True, blank=True)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='customers')
-
-    class Meta:
-        verbose_name_plural = 'clients'
-
-    def __str__(self):
-        return f'Клиент: {self.fio}, телефон: {self.telephone}'
 
 
 class Comment(models.Model):
