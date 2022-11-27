@@ -19,12 +19,13 @@ class CustomerForm(ModelForm):
 class DeviceForm(ModelForm):
     class Meta:
         model = Device
-        fields = ('name', 'model', 'serial_number',)
+        fields = ('name', 'model', 'serial_number', 'problem')
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'style': 'width:45%'}),
             'model': forms.TextInput(attrs={'class': 'form-control', 'style': 'width:45%'}),
             'serial_number': forms.TextInput(attrs={'class': 'form-control', 'style': 'width:45%'}),
+            'problem': forms.TextInput(attrs={'class': 'form-control', 'style': 'width:45%'}),
         }
 
 

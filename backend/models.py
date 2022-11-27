@@ -16,10 +16,10 @@ class Customer(models.Model):
 
 
 class Device(models.Model):
-    name = models.CharField(verbose_name='Устройство', max_length=100)
-    model = models.CharField(verbose_name='Модель', max_length=100)
-    serial_number = models.CharField(verbose_name='Серийный номер', max_length=100)
-
+    name = models.CharField(verbose_name='Устройство', max_length=50)
+    model = models.CharField(verbose_name='Модель', max_length=50)
+    serial_number = models.CharField(verbose_name='Серийный номер', max_length=40)
+    problem = models.CharField(verbose_name='Неисправность', max_length=120)
 
 class Order(models.Model):
     STATUS = (
