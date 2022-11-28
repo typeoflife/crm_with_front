@@ -5,12 +5,14 @@
 
 <div>
     <a href="{% url 'edit_order' order.id %}" class="btn btn-primary btn-sm active" style="margin-top: 10px; margin-left: 15px;">Изменить заказ</a>
-</div>
+</div><br>
 
-<div id="printArea">
+<div id="printArea" style="margin-left: 5px;">
     <h3>Заказ №{{order.order_number}} от {{order.date_added}}</h3>
     <p>Устройство: {{order.device.name}} {{order.device.model}}</p>
     <p>Неисправность: {{order.device.problem}}</p>
+    <p>Внешний вид: {{order.device.condition}}</p>
+    <p>Комплект: {{order.device.kit}}</p>
     <p>Сумма:  {{order.summ}} р.</p>
     <p>Клиент: {{order.customer.fio}}</p>
     <p>Телефон: {{order.customer.telephone}}</p>

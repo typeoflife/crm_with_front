@@ -20,6 +20,8 @@ class Device(models.Model):
     model = models.CharField(verbose_name='Модель', max_length=50)
     serial_number = models.CharField(verbose_name='Серийный номер', max_length=40)
     problem = models.CharField(verbose_name='Неисправность', max_length=120)
+    kit = models.CharField(verbose_name='Комплект', max_length=50, null=True, blank=True, default='Устройство')
+    condition = models.CharField(verbose_name='Внешний вид', max_length=70,null=True, blank=True, default='Б/У')
 
 class Order(models.Model):
     STATUS = (
