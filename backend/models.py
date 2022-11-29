@@ -1,10 +1,10 @@
 from django.contrib.auth.models import User
 from django.db import models
-
+from phonenumber_field.modelfields import PhoneNumberField
 
 class Customer(models.Model):
     fio = models.CharField(verbose_name='ФИО клиента', max_length=50)
-    telephone = models.CharField(verbose_name='Контакный телефон', max_length=12)
+    phone = PhoneNumberField(verbose_name='Контактный телефон')
     address = models.CharField(verbose_name='Адрес клиента', max_length=80, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='customers')
 
@@ -12,7 +12,7 @@ class Customer(models.Model):
         verbose_name_plural = 'customers'
 
     def __str__(self):
-        return f'Клиент: {self.fio}, телефон: {self.telephone}'
+        return f'Клиент: {self.fio}, телефон: {self.phone}'
 
 
 class Device(models.Model):

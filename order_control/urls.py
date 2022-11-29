@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from allauth.account.views import SignupView, LoginView, LogoutView
-from backend.views import robots_txt
+from backend.views import robots_txt, customers, cash, reports, profile
 from backend.views import index, home, warehouse, orders, retrieve_order, new_order, edit_order
 
 urlpatterns = [
@@ -11,6 +11,10 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('home/', home, name='home'),
     path('warehouse/', warehouse, name='warehouse'),
+    path('customers/', customers, name='customers'),
+    path('cash/', cash, name='cash'),
+    path('reports/', reports, name='reports'),
+    path('profile/', profile, name='profile'),
     path('order/<order_id>', retrieve_order, name='order'),
     path('new_order/', new_order, name='new_order'),
     path('orders/', orders, name='orders'),

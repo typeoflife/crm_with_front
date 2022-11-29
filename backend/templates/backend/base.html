@@ -54,7 +54,6 @@
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
 
-      <!-- Nav Item - Dashboard -->
       <li class="nav-item active">
         <a class="nav-link" href="{% url 'orders' %}">
           <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -64,14 +63,12 @@
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
 
-      <!-- Nav Item - Companies -->
       <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{% url 'cash' %}">
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Касса</span></a>
       </li>
 
-      <!-- Nav Item - Contact -->
       <li class="nav-item">
         <a class="nav-link" href="{% url 'warehouse' %}">
           <i class="fas fa-fw fa-table"></i>
@@ -81,23 +78,20 @@
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
 
-      <!-- Nav Item - Profile -->
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'warehouse' %}">
+        <a class="nav-link" href="{% url 'customers' %}">
           <i class="fas fa-fw fa-user"></i>
           <span>Клиенты</span></a>
       </li>
 
-      <!-- Nav Item - Change Password -->
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'warehouse' %}">
+        <a class="nav-link" href="{% url 'reports' %}">
           <i class="fas fa-fw fa-key"></i>
           <span>Отчеты</span></a>
       </li>
 
-      <!-- Nav Item - Logout -->
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'warehouse' %}">
+        <a class="nav-link" href="{% url 'profile' %}">
           <i class="fas fa-fw fa-sign-out-alt"></i>
           <span>Профиль</span></a>
       </li>

@@ -1,5 +1,6 @@
 import datetime
 
+from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
@@ -52,8 +53,8 @@ def retrieve_order(request, order_id):
 
 def new_order(request):
     if request.method == "POST":
-        deviceform = DeviceForm(request.POST)
         customerform = CustomerForm(request.POST)
+        deviceform = DeviceForm(request.POST)
         if deviceform.is_valid() and customerform.is_valid():
             device = deviceform.save(commit=False)
             customer = customerform.save(commit=False)
@@ -66,13 +67,13 @@ def new_order(request):
             return redirect('order', order_id=order.id)
         else:
             context = {
-                'deviceform': deviceform,
                 'customerform': customerform,
+                'deviceform': deviceform,
             }
     else:
         context = {
-            'deviceform': DeviceForm(),
             'customerform': CustomerForm(),
+            'deviceform': DeviceForm(),
         }
     return render(request, 'backend/new_order.html', context)
 
@@ -96,8 +97,32 @@ def edit_order(request, order_id):
     return render(request, 'backend/edit_order.html', context)
 
 
+def customers(request):
+    user = User.objects.filter(username=request.user).first()
+    customers = user.customers.all()
+    paginator = Paginator(customers, 30)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context = {'page_obj': page_obj}
+
+    return render(request, 'backend/customers.html', context)
+
+
 def warehouse(request):
     return render(request, 'backend/warehouse.html')
+
+
+def reports(request):
+    return render(request, 'backend/reports.html')
+
+
+def cash(request):
+    return render(request, 'backend/cash.html')
+
+
+def profile(request):
+    return render(request, 'backend/profile.html')
+
 
 # class NewOrders(APIView):
 #     renderer_classes = [JSONRenderer, TemplateHTMLRenderer]

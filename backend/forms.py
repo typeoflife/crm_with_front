@@ -7,11 +7,11 @@ from backend.models import Order, Device, Customer
 class CustomerForm(ModelForm):
     class Meta:
         model = Customer
-        fields = ('fio', 'telephone', 'address',)
+        fields = ('fio', 'phone', 'address',)
 
         widgets = {
             'fio': forms.TextInput(attrs={'class': 'form-control', 'style': 'width:45%'}),
-            'telephone': forms.TextInput(attrs={'class': 'form-control', 'style': 'width:45%'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'style': 'width:45%'}),
             'address': forms.TextInput(attrs={'class': 'form-control', 'style': 'width:45%'}),
         }
 

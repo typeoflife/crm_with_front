@@ -1,36 +1,25 @@
-{% extends "backend/base.html" %}
+{% extends 'backend/base.html' %}
 {% block content %}
 {% load static %}
 
 <link rel="stylesheet" href="{% static 'css/table.css' %}">
 
-<p>Заказы:</p>
-
-<div>
-    <a href="{% url 'new_order' %}" class="btn btn-primary btn-sm active" style="margin-top: 10px; margin-left: 15px;">
-        Добавить заказ</a>
-</div><br>
+<h1>Клиенты</h1>
 
 <table class="table">
     <thead>
     <tr>
-        <th>Заказ №</th>
-        <th>Статус</th>
-        <th>Сумма</th>
-        <th>Устройство</th>
-        <th>Модель</th>
         <th>ФИО</th>
+        <th>Телефон</th>
+        <th>Адрес</th>
     </tr>
     </thead>
     <tbody>
-    {% for order in page_obj %}
+    {% for customer in page_obj %}
     <tr>
-        <td><a href="{% url 'order' order.id %}">Заказ №{{order.order_number}}</a></td>
-        <td>{{order.get_status_display}}</td>
-        <td>{{order.summ}}</td>
-        <td>{{order.device.name}}</td>
-        <td>{{order.device.model}}</td>
-        <td>{{order.customer.fio}}</td>
+        <td>{{customer.fio}}</td>
+        <td>{{customer.phone}}</td>
+        <td>{{customer.address}}</td>
     </tr>
     {% endfor %}
     </tbody>
