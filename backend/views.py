@@ -1,13 +1,14 @@
 import datetime
 
+from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_GET
 
-from backend.forms import EditOrderForm, CustomerForm, DeviceForm
-from backend.models import Order
+from backend.forms import EditOrderForm, CustomerForm, DeviceForm, CashForm
+from backend.models import Order, Cash
 
 
 def check_order_owner(owner, request):
@@ -46,8 +47,9 @@ def orders(request):
 
 def retrieve_order(request, order_id):
     order = Order.objects.select_related('device').get(id=order_id)
+    cash = Cash.objects.filter(user_id=request.user.id)
     check_order_owner(order.user, request)
-    context = {'order': order}
+    context = {'order': order, 'cash': cash}
     return render(request, 'backend/order.html', context)
 
 
@@ -61,6 +63,7 @@ def new_order(request):
             device.save()
             customer.user_id = request.user.id
             customer.save()
+            messages.success(request, 'Заказ создан')
             order = Order.objects.create(user=request.user, date_added=datetime.datetime.now(),
                                          order_number=Order.objects.filter(user_id=request.user.id).count() + 1,
                                          device_id=device.id, customer_id=customer.id)
@@ -79,9 +82,8 @@ def new_order(request):
 
 
 def edit_order(request, order_id):
-    """"Редактирует запись конкретного заказа"""
     order = Order.objects.select_related('device').get(id=order_id)
-    # Проверка того, что тема принадлежит текущему пользователю
+    # Проверка того, что заказ принадлежит текущему пользователю
     check_order_owner(order.user, request)
     if request.method != 'POST':
         """Исходный запрос, форма заполняется данными текущей записи"""
@@ -91,10 +93,33 @@ def edit_order(request, order_id):
         form = EditOrderForm(instance=order, data=request.POST)
         if form.is_valid():
             form.save()
+            messages.warning(request, 'Заказ изменен')
             return redirect('order', order_id=order.id)
 
     context = {'order': order, 'form': form}
     return render(request, 'backend/edit_order.html', context)
+
+
+def close_order(request, order_id):
+    try:
+        order = Order.objects.select_related('device').exclude(status='close').get(
+            id=order_id, user_id=request.user.id)
+        if request.method == "POST":
+            cash = request.POST.get('cash')
+            if not cash:
+                messages.error(request, 'Выберите кассу')
+                return redirect('order', order_id=order.id)
+            else:
+                user_cash = Cash.objects.get(name=cash, user_id=request.user)
+                user_cash.money += order.summ
+                order.status = 'close'
+                user_cash.save()
+                order.save()
+                messages.success(request, 'Заказ закрыт')
+                return redirect('order', order_id=order.id)
+    except Order.DoesNotExist:
+        messages.error(request, 'Заказ уже закрыт')
+        return redirect('order', order_id=order_id)
 
 
 def customers(request):
@@ -108,6 +133,36 @@ def customers(request):
     return render(request, 'backend/customers.html', context)
 
 
+def cash(request):
+    cash = Cash.objects.filter(user_id=request.user)
+    context = {'cash': cash}
+    return render(request, 'backend/cash.html', context)
+
+
+def one_cash(request, cash_id):
+    cash = Cash.objects.get(user_id=request.user.id, id=cash_id)
+    # check_order_owner(order.user, request)
+    context = {'cash': cash}
+    return render(request, 'backend/one_cash.html', context)
+
+
+def new_cash(request):
+    if request.method == "POST":
+        form = CashForm(request.POST)
+        if form.is_valid():
+            cash = form.save(commit=False)
+            cash.user = request.user
+            all_user_cash = Cash.objects.filter(user_id=request.user).values_list('name', flat=True)
+            if cash.name in all_user_cash:
+                messages.error(request, 'Касса с таким именем уже существует')
+                return redirect('cash')
+            cash.save()
+            return redirect('cash')
+    else:
+        form = CashForm()
+    return render(request, 'backend/new_cash.html', {'form': form})
+
+
 def warehouse(request):
     return render(request, 'backend/warehouse.html')
 
@@ -116,13 +171,8 @@ def reports(request):
     return render(request, 'backend/reports.html')
 
 
-def cash(request):
-    return render(request, 'backend/cash.html')
-
-
 def profile(request):
     return render(request, 'backend/profile.html')
-
 
 # class NewOrders(APIView):
 #     renderer_classes = [JSONRenderer, TemplateHTMLRenderer]

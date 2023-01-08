@@ -4,105 +4,90 @@
 
 <link rel="stylesheet" href="{% static 'css/table.css' %}">
 
-<p>Заказы:</p>
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4 mt-4">
+        <h1 class="h3 mb-0 text-gray-800">Заказы</h1>
+    </div>
 
-<div>
-    <a href="{% url 'new_order' %}" class="btn btn-primary btn-sm active" style="margin-top: 10px; margin-left: 15px;">
-        Добавить заказ</a>
-</div><br>
+    <div>
+        <a href="{% url 'new_order' %}" class="btn btn-primary btn-sm active" style="margin-top: 10px; margin-left: 15px;">
+            Добавить заказ</a>
+    </div><br>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>Заказ №</th>
-        <th>Статус</th>
-        <th>Сумма</th>
-        <th>Устройство</th>
-        <th>Модель</th>
-        <th>ФИО</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for order in page_obj %}
-    <tr>
-        <td><a href="{% url 'order' order.id %}">Заказ №{{order.order_number}}</a></td>
-        <td>{{order.get_status_display}}</td>
-        <td>{{order.summ}}</td>
-        <td>{{order.device.name}}</td>
-        <td>{{order.device.model}}</td>
-        <td>{{order.customer.fio}}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
-
-<!--<div class="pagination">-->
-<!--    <span class="step-links">-->
-<!--        {% if page_obj.has_previous %}-->
-<!--            <a href="?page={{ page_obj.previous_page_number }}"-->
-<!--               class="btn btn-primary btn-sm active" style="margin-top: 10px; margin-left: 15px;">Предыдущая</a>-->
-<!--        {% endif %}-->
-
-<!--        {% if page_obj.has_next %}-->
-<!--            <a href="?page={{ page_obj.next_page_number }}"-->
-<!--               class="btn btn-primary btn-sm active" style="margin-top: 10px; margin-left: 15px;">Следующая</a>-->
-<!--        {% endif %}-->
-
-<!--        <span class="current">-->
-<!--            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}-->
-<!--        </span>-->
-
-<!--    </span>-->
-<!--</div>-->
-
-<!--Pagination-->
-<div class="container">
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-left">
-        {% if page_obj.has_previous %}
-            <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}"><</a>
-          </li>
-        {% else %}
-            <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1" aria-disabled="True"><</a>
-          </li>
-        {% endif %}
-
-        {% if page_obj.number|add:'-4' > 1 %}
-            <li class="page-item"><a class="page-link" href="?page=1">{{ 1 }}</a></li>
-            <li class="page-item"><a class="page-link" href="?page={{ page_obj.number|add:'-5' }}">&hellip;</a></li>
-        {% endif %}
-
-        {% for page in page_obj.paginator.page_range %}
-            {% if page_obj.number == page %}
-                <li class="page-item active" aria-current="page">
-              <span class="page-link">
-                {{ page }}
-                <span class="sr-only">(current)</span>
-              </span>
-            </li>
-            {% elif page > page_obj.number|add:'-5' and page < page_obj.number|add:'5' %}
-                 <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
-            {% endif %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Заказ №</th>
+            <th>Статус</th>
+            <th>Сумма</th>
+            <th>Устройство</th>
+            <th>Модель</th>
+            <th>ФИО</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in page_obj %}
+        <tr>
+            <td><a href="{% url 'order' order.id %}">Заказ №{{order.order_number}}</a></td>
+            <td>{{order.get_status_display}}</td>
+            <td>{{order.summ}}</td>
+            <td>{{order.device.name}}</td>
+            <td>{{order.device.model}}</td>
+            <td>{{order.customer.fio}}</td>
+        </tr>
         {% endfor %}
+        </tbody>
+    </table>
 
-        {% if page_obj.paginator.num_pages > page_obj.number|add:'4' %}
-           <li class="page-item"><a class="page-link" href="?page={{ page_obj.number|add:'5' }}">&hellip;</a></li>
-           <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a></li>
-        {% endif %}
+    <!--Pagination-->
+    <div class="container">
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-left">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}"><</a>
+              </li>
+            {% else %}
+                <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="True"><</a>
+              </li>
+            {% endif %}
 
-        {% if page_obj.has_next %}
-            <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.next_page_number }}">></a>
-          </li>
-        {% else %}
-            <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1" aria-disabled="True">></a>
-          </li>
-        {% endif %}
-      </ul>
-    </nav>
+            {% if page_obj.number|add:'-4' > 1 %}
+                <li class="page-item"><a class="page-link" href="?page=1">{{ 1 }}</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.number|add:'-5' }}">&hellip;</a></li>
+            {% endif %}
+
+            {% for page in page_obj.paginator.page_range %}
+                {% if page_obj.number == page %}
+                    <li class="page-item active" aria-current="page">
+                  <span class="page-link">
+                    {{ page }}
+                    <span class="sr-only">(current)</span>
+                  </span>
+                </li>
+                {% elif page > page_obj.number|add:'-5' and page < page_obj.number|add:'5' %}
+                     <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.paginator.num_pages > page_obj.number|add:'4' %}
+               <li class="page-item"><a class="page-link" href="?page={{ page_obj.number|add:'5' }}">&hellip;</a></li>
+               <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a></li>
+            {% endif %}
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">></a>
+              </li>
+            {% else %}
+                <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="True">></a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+    </div>
 </div>
 <!--end of Pagination-->
 

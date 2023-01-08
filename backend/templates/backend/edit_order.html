@@ -6,7 +6,7 @@
   <form action="{% url 'edit_order' order.id %}" method='post'>
       {% csrf_token %}
       {{ form.as_p}}
-      <button type="submit" class="btn btn-primary btn-sm active" style="margin-top: 10px; margin-left: 15px;">Добавить</button>
+      <button type="submit" class="btn btn-primary btn-sm active" style="margin-top: 10px; margin-left: 15px;">Изменить</button>
   </form>
 
 {% endblock content %}

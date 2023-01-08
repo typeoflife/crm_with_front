@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
+
 class Customer(models.Model):
     fio = models.CharField(verbose_name='ФИО клиента', max_length=50)
     phone = PhoneNumberField(verbose_name='Контактный телефон')
@@ -21,7 +22,8 @@ class Device(models.Model):
     serial_number = models.CharField(verbose_name='Серийный номер', max_length=40)
     problem = models.CharField(verbose_name='Неисправность', max_length=120)
     kit = models.CharField(verbose_name='Комплект', max_length=50, null=True, blank=True, default='Устройство')
-    condition = models.CharField(verbose_name='Внешний вид', max_length=70,null=True, blank=True, default='Б/У')
+    condition = models.CharField(verbose_name='Внешний вид', max_length=70, null=True, blank=True, default='Б/У')
+
 
 class Order(models.Model):
     STATUS = (
@@ -70,3 +72,4 @@ class Cash(models.Model):
 
     def __str__(self):
         return f'{self.name}'
+

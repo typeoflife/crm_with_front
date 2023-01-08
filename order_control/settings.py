@@ -13,6 +13,7 @@ import os
 from os.path import join, dirname
 from pathlib import Path
 from dotenv import load_dotenv
+from django.contrib.messages import constants as messages
 
 dotenv_path = join(dirname(__file__), os.path.pardir, '.env')
 load_dotenv(dotenv_path)
@@ -149,3 +150,11 @@ DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER')
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-info',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}

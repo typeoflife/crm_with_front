@@ -1,11 +1,15 @@
 {% extends "backend/base.html" %}
+{% load static %}
 {% block content %}
 
-<input type="button" value="Напечатать" onclick="printArea()">
+<input type="button" class="btn btn-primary btn-sm active" style="margin-top: 10px; margin-left: 15px;"
+       value="Напечатать" onclick="printArea()">
 
 <div>
-    <a href="{% url 'edit_order' order.id %}" class="btn btn-primary btn-sm active" style="margin-top: 10px; margin-left: 15px;">Изменить заказ</a>
+    <a href="{% url 'edit_order' order.id %}" class="btn btn-primary btn-sm active"
+       style="margin-top: 10px; margin-left: 15px;">Изменить заказ</a>
 </div><br>
+
 
 <div id="printArea" style="margin-left: 5px;">
     <h3>Заказ №{{order.order_number}} от {{order.date_added}}</h3>
@@ -13,25 +17,45 @@
     <p>Неисправность: {{order.device.problem}}</p>
     <p>Внешний вид: {{order.device.condition}}</p>
     <p>Комплект: {{order.device.kit}}</p>
-    <p>Сумма:  {{order.summ}} р.</p>
+    <p>Сумма: {{order.summ}} р.</p>
     <p>Клиент: {{order.customer.fio}}</p>
     <p>Телефон: {{order.customer.phone}}</p>
 </div>
 
-  <p>Заметки:</p>
-  <ul>
-      {% for entry in entries %}
-        <li>
-            <p>{{ entry.date_added|date:'M d, Y H:i'}}</p>
-            <p>{{ entry.text|linebreaks }}</p>
-            <p>
-                <a href="{% url 'backend:edit_entry' entry.id %}">Изменить комментарий</a>
-            </p>
-        </li>
-      {% empty %}
-        <li>Нет комментариев для данного заказа</li>
-      {% endfor %}
-  </ul>
+<div>
+    <form action="{% url 'close_order' order.id  %}" id="cash-form" method="post">
+        {% csrf_token %}
+        <select class="form-control" name="cash" style="width:12%;">
+            <option name="no-cash" class="no-cash" value="0" disabled selected hidden>Выберите кассу</option>
+            {% for every_cash in cash %}
+            <option>{{every_cash}}</option>
+            {% empty %}
+            <option>Нет ни одной кассы</option>
+            {% endfor %}
+        </select>
+        <button type="submit" id="btn-submit" class="btn btn-primary btn-sm active" value="Select"
+                style="margin-top: 10px; margin-left: 15px;">Закрыть заказ<br>
+        </button>
+    </form>
+</div><br>
+
+
+<p>Заметки:</p>
+<ul>
+    {% for entry in entries %}
+    <li>
+        <p>{{ entry.date_added|date:'M d, Y H:i'}}</p>
+        <p>{{ entry.text|linebreaks }}</p>
+        <p>
+            <a href="{% url 'backend:edit_entry' entry.id %}">Изменить комментарий</a>
+        </p>
+    </li>
+    {% empty %}
+    <li>Нет комментариев для данного заказа</li>
+    {% endfor %}
+</ul>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 
 <script>
         function printArea() {
@@ -47,6 +71,8 @@
             a.document.close();
             a.print();
         }
+
+
 </script>
 
 

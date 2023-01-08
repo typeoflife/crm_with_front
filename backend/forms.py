@@ -1,7 +1,8 @@
 from django import forms
+from django.contrib.auth.models import User
 from django.forms import ModelForm
 
-from backend.models import Order, Device, Customer
+from backend.models import Order, Device, Customer, Cash
 
 
 class CustomerForm(ModelForm):
@@ -47,3 +48,31 @@ class EditOrderForm(ModelForm):
             'summ': forms.TextInput(attrs={'class': 'form-control', 'style': 'width:auto'}),
             'text': forms.TextInput(attrs={'class': 'form-control', 'style': 'width:65%'}),
         }
+
+class CashForm(ModelForm):
+    class Meta:
+        model = Cash
+        fields = ('name',)
+
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'style': 'width:45%'}),
+        }
+
+    # all_user_cash = Cash.objects.filter(user_id=request.user).values_list('name', flat=True)
+    # print(all_user_cash)
+    # if cash.name in all_user_cash:
+
+# class ChoiseCash(ModelForm):
+#     class Meta:
+#         model = Order
+#         fields = ('status',)
+#         STATUS_CHOICES = (
+#             ('open', 'Открыт'),
+#             ('work', 'Обслуживается'),
+#             ('done', 'Готов'),
+#             ('close', 'Закрыт'),
+#         )
+#         widgets = {
+#             'status': forms.Select(choices=STATUS_CHOICES,
+#                                    attrs={'class': 'form-control form-control-sm', 'style': 'width:auto'}),
+#         }

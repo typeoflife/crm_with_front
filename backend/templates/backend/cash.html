@@ -1,6 +1,46 @@
 {% extends 'backend/base.html' %}
+
 {% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
 
-<h1>В разработке</h1>
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4 mt-4">
+        <h1 class="h3 mb-0 text-gray-800">Кассы</h1>
+    </div>
+    <div>
+        <a href="{% url 'new_cash' %}" class="btn btn-primary btn-sm active"
+           style="margin-top: 10px; margin-left: 15px;">
+            Добавить кассу</a>
+    </div>
+    <br>
 
+    {% for every_cash in cash %}
+    <div class="row">
+        <!-- Cash card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <a href="{% url 'one_cash' every_cash.id %}">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    {{every_cash.name}}
+                                </div>
+                            </a>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{every_cash.money}}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-money-bill-alt fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% empty %}
+    <li>Нет ни одной кассы</li>
+    {% endfor %}
+</div>
 {% endblock content %}
